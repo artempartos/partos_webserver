@@ -1,0 +1,16 @@
+nightscout.partos.me {
+	reverse_proxy ns:1337
+}
+
+wedding.partos.me {
+	reverse_proxy wedding:8000
+}
+
+food.partos.me {
+	root * /etc/caddy/data
+	basicauth * {
+		partos JDJhJDE0JC40MmE3OXp4dnQ1TzRMSTNDOXlpYi5Ib2F3Q0t6VVJtRUVORHQyTGtNdXhDa3dyVHlySVgu
+	}
+	try_files {path}.html teach/control.html
+	file_server
+}
