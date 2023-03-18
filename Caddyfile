@@ -1,3 +1,7 @@
+local.partos.me {
+	reverse_proxy lt:1338
+}
+
 nightscout.partos.me {
 	reverse_proxy ns:1337
 }
