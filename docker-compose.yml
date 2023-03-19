@@ -3,7 +3,9 @@ version: "3.7"
 services:
   webserver:
     build: .
+    environment:
+    - AUTHORIZED_KEYS_BASE64='BASE65ENCODED_PUBKEY'
     ports:
-      - "80:80"
+      - 80:80
 
 

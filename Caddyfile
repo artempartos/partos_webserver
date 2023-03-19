@@ -1,12 +1,20 @@
-local.partos.me {
-	reverse_proxy lt:1338
+{
+    http_port 80
+    https_port 443
+    auto_https disable_redirects
 }
 
 nightscout.partos.me {
+	tls {
+			on_demand
+	}
 	reverse_proxy ns:1337
 }
 
 wedding.partos.me {
+	tls {
+			on_demand
+	}
 	reverse_proxy wedding:8000
 }
 
@@ -17,4 +25,32 @@ food.partos.me {
 	}
 	try_files {path}.html teach/control.html
 	file_server
+}
+
+http://local.partos.me, https://local.partos.me {
+    tls {
+        on_demand
+    }
+    reverse_proxy localhost:2050
+}
+
+http://*.local.partos.me, https://*.local.partos.me {
+    tls {
+        on_demand
+    }
+    @hostnames header_regexp host Host ([0-9]+)\.local.partos.me
+    handle @hostnames {
+        reverse_proxy localhost:{http.regexp.host.1}
+    }
+    handle_errors {
+        respond "Unable to connect to {http.regexp.host.1}: {http.error.status_code} {http.error.status_text}" {http.error.status_code} {
+            close
+        }
+    }
+    handle {
+            respond 400 {
+                body "bad request"
+                close
+            }
+    }
 }

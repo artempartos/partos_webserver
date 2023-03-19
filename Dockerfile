@@ -1,4 +1,21 @@
-FROM caddy:2.5.1-alpine
+FROM caddy:2.6.4-alpine
 
-ADD Caddyfile /etc/caddy/Caddyfile
-ADD teach /etc/caddy/data/teach
+RUN apk add --no-cache openssh-server           && \
+    adduser frwd -s /bin/ssh-entrypoint.sh -D   && \
+    passwd -u frwd                              && \
+    mkdir /etc/dropbear                         && \
+    echo /bin/ssh-entrypoint.sh >> /etc/shells
+
+COPY sshd_config /etc/ssh/sshd_config
+COPY Caddyfile /etc/caddy/Caddyfile
+COPY teach /etc/caddy/data/teach
+COPY ssh-entrypoint.sh /bin/ssh-entrypoint.sh
+COPY entrypoint.sh /bin/entrypoint.sh
+
+EXPOSE 80/tcp
+EXPOSE 443/tcp
+
+VOLUME ["/data"]
+
+ENTRYPOINT "/bin/entrypoint.sh"
+
