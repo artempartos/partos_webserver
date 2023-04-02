@@ -2,36 +2,32 @@
     http_port 80
     https_port 443
     auto_https disable_redirects
+    log {
+        output stdout
+    }
 }
 
 nightscout.partos.me {
-	tls {
-			on_demand
-	}
-	reverse_proxy ns:1337
+    tls {
+            on_demand
+    }
+    reverse_proxy ns:1337
 }
 
 wedding.partos.me {
-	tls {
-			on_demand
-	}
-	reverse_proxy wedding:8000
+    tls {
+            on_demand
+    }
+    reverse_proxy wedding:8000
 }
 
 food.partos.me {
-	root * /etc/caddy/data
-	basicauth * {
-		partos JDJhJDE0JC40MmE3OXp4dnQ1TzRMSTNDOXlpYi5Ib2F3Q0t6VVJtRUVORHQyTGtNdXhDa3dyVHlySVgu
-	}
-	try_files {path}.html teach/control.html
-	file_server
-}
-
-http://local.partos.me, https://local.partos.me {
-    tls {
-        on_demand
+    root * /etc/caddy/data
+    basicauth * {
+        partos JDJhJDE0JC40MmE3OXp4dnQ1TzRMSTNDOXlpYi5Ib2F3Q0t6VVJtRUVORHQyTGtNdXhDa3dyVHlySVgu
     }
-    reverse_proxy localhost:2050
+    try_files {path}.html teach/control.html
+    file_server
 }
 
 http://*.local.partos.me, https://*.local.partos.me {
@@ -53,4 +49,18 @@ http://*.local.partos.me, https://*.local.partos.me {
                 close
             }
     }
+}
+
+http://local.partos.me, https://local.partos.me {
+    tls {
+        on_demand
+    }
+    reverse_proxy localhost:2050
+}
+
+http://ws.local.partos.me, https://ws.local.partos.me {
+    tls {
+        on_demand
+    }
+    reverse_proxy localhost:1050
 }
