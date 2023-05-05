@@ -21,6 +21,13 @@ wedding.partos.me {
     reverse_proxy wedding:8000
 }
 
+outline.partos.me {
+    tls {
+            on_demand
+    }
+    reverse_proxy localhost:8081
+}
+
 food.partos.me {
     root * /etc/caddy/data
     basicauth * {
