@@ -1,7 +1,23 @@
+http://www.mydomain,http://mydomain{
+    redir https://mydomain{url}
+}
+
+https://mydomain {
+    root /var/www/html
+    gzip
+    index index.html
+    tls mymail@gmail.com
+    proxy /ss https://localhost:1443 {
+        without /ss
+        websocket
+        header_upstream -Origin
+    }
+}
+
 {
     http_port 80
     https_port 443
-    auto_https disable_redirects
+    auto_https enable_redirects
     log {
         output stdout
     }
@@ -23,9 +39,16 @@ wedding.partos.me {
 
 outline.partos.me {
     tls {
-            on_demand
+        on_demand
     }
-    reverse_proxy localhost:8081
+    route {
+        @websockets {
+            header Connection *Upgrade*
+            header Upgrade websocket
+        }
+        reverse_proxy @websockets localhost:8082
+        reverse_proxy localhost:8081
+    }
 }
 
 food.partos.me {
